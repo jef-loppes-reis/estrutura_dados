@@ -1,0 +1,36 @@
+ESTRUTURA DE DADOS ENTREGA 1
+1) Elabore um rápido estudo sobre as estruturas de dados 'embutidas' do Python (ou análogas 
+caso utilize outra linguagem), listando de forma objetiva as principais características de cada uma 
+e suas principais funções.
+- list
+- set
+- map
+2) Elabore um CRUD na estrutura list para manipular nomes de países, o usuário informará os 
+nomes manualmente.
+3) Elabore um simples CRUD em estrutura map para manipular uma coleção de jogadores 
+(número da camisa, nome dos jogadores), limitada a 20 jogadores onde o usuário informará os 
+nomes manualmente.
+4) Elabore uma simples manipulação de arquivo (TXT) com funções para adicionar, listar, alterar 
+e excluir.
+5) Realize um rápido estudo sobre ordenação de valores utilizando o método da bolha (Bubble
+Sort)
+7) Desenvolva um programa que apresente um menu ao usuário onde terão as seguintes opções:
+=== MENU ===
+(1) Listar todos os produtos
+(2) Listar produto pelo ID
+(3) Listar todos os produtos ordenados (A/Z)
+(3) Cadastrar novo produto
+(4) Editar produto
+(5) Excluir produto
+(6) Sair do programa
+============
+- Serão informados os seguintes dados para cada produto: id (preferencialmente 
+autoincrementado), descricao, peso, valor, fornecedor
+- No item 3 será utilizado o Bubble Sort para apresentação (A) Crescente ou (Z) Decrescente de 
+acordo com escolha do usuário.
+- Cada produto informado pelo usuário será inserido em uma estrutura de dicionário (produto)
+- Em uma lista (produtos) cada elemento será um dicionário (produto)
+- Sempre que iniciar o programa o usuário deverá informar usuário e senha (ex: 
+nome.sobrenome, alfaNumerica) que por sua vez estará gravada em um arquivo usuario.txt na 
+raiz do programa.
+- Os produtos serão persistidos em um arquivo produtos.txt
