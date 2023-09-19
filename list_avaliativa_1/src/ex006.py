@@ -13,6 +13,7 @@ while resp != 6:
   print('(3)Cadastrar novo produto')
   print('(4)Editar Produto')
   print('(5)Excluir Produto\n')
+  print('(6)Sair do programa\n')
   
   resp = int(input())
 
@@ -40,16 +41,21 @@ while resp != 6:
 
     case 4:
       querAlterarProdutos='s'
+      
       while querAlterarProdutos == 's':
         edit_idx = int(input('Digite o id do produto que deseja editar: '))
         querEditarCampoDoProduto = 's'
-        
         while querEditarCampoDoProduto == 's':
+        
           field = input('Digite o campo que deseja editar:') 
           produtos[edit_idx][field] = input('Digite o novo valor: ')
           querEditarCampoDoProduto = input('Deseja continuar alterando esse produto? (Resposta: s/n)')
-          
         querAlterarProdutos= input('Deseja continuar alterando produtos? (Resposta: s/n)')
+
+    case 5:
+      del_idx = int(input('Digite o id do produto que deseja excluir: '))
+      del produtos[del_idx]
+    
           
       
       
