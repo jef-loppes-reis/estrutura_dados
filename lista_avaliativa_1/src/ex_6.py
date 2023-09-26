@@ -1,3 +1,5 @@
+import os
+
 def acrescenta_ids_ordenados(tam):
   ids_ordenados = []
   for i in range(tam):
@@ -9,6 +11,9 @@ def reordena_ids(estrutura_de_dados, tam):
     estrutura_de_dados[i]["id"] = i
   return estrutura_de_dados
 
+#essa função pode se tornar mais genérica, como: cria arquivo, coloca cabeçalho, coloca
+#no arquivo csv a lista de dicionários - ou seja, ser uma função que transforma uma
+#lista de dicionários em um csv
 def atualiza_registros_em_produto_txt(nome_arquivo, produtos, qtd_registros):
   with open(nome_arquivo, "w") as arquivo:
     arquivo.write('id,nome,descricao,peso,valor,fornecedor\n')
@@ -19,9 +24,48 @@ def cria_registro_em_produto_txt(nome_arquivo, produtos, next_id):
   with open(nome_arquivo, "a") as arquivo:
     arquivo.write(f'{produtos[next_id]["id"]},{produtos[next_id]["nome"]},{produtos[next_id]["descricao"]},{produtos[next_id]["peso"]},{produtos[next_id]["valor"]},{produtos[next_id]["fornecedor"]}\n')
 
+def verifica_cria_arquivo(nome_arquivo, conteudo_inicial):
+  if not os.path.exists(nome_arquivo):
+    open(nome_arquivo, "a")
+    with open(nome_arquivo, "a") as arquivo:
+      arquivo.write(conteudo_inicial)
+    return False
+  else:
+    return True
+    
+def le_linha_csv(linha):
+#tentar fazer o split segundo as virgulas, em seguida
+#tirar o \n do último campo com replace. Somente vou testar o que acontece
+#quando faço um split em uma lista. 
+  info_linha = []
+  info_linha= linha.split(',')
+  last_idx = len(info_linha) - 1
+  info_linha[last_idx] = info_linha[last_idx].replace('\n', '')
+  return info_linha
+
+def cria_listdicio_com_csv(nome_arquivo):
+  
+  with open(nome_arquivo, "r") as arquivo:
+    csv = arquivo.readlines()
+
+  dic_defs = le_linha_csv(csv[0])
+  list_dicio = []
+  n_linhas = len(csv)
+  
+  for i in range(n_linhas - 1):
+    list_dicio.append({})
+    dados_linha_atual = le_linha_csv(csv[i + 1])
+    for j in range(len(dic_defs)):
+      list_dicio[i][dic_defs[j]] = dados_linha_atual[j]
+  return list_dicio      
+
+
 #Autenticação
 username = input('username: ')
 password = input('password: ')
+
+#puxando arquivo para autenticação
+verifica_cria_arquivo("./usuario.txt", "root\n123456")
 
 #Criando a autenticação. Primeiro, vamos extrair o login e senha corretos
 #do arquivo, em seguida tirar o '\n' do login.
@@ -32,7 +76,7 @@ password = input('password: ')
 
 
 #vai ser um read, "r", pois queremos extrair informações desse txt
-with open("usuario.txt", "r") as arquivo:
+with open("./usuario.txt", "r") as arquivo:
   login_info = arquivo.readlines()
 
 #aqui, vamos estar tirando, ou deletando o '\n'
@@ -52,41 +96,27 @@ print(f'\nOlá, {username}!\n\n')
 #Quando iniciar o programa, já tem de puxar dos dados persistidos em 
 #produtos.txt
 
-with open("produtos.txt", "r") as arquivo:
-  #vamos pegar o último id, que equivale ao número total de produtos
-  produtos_txt = arquivo.readlines()
+
+tem_prod_txt = verifica_cria_arquivo("./produtos.txt", "id,nome,descricao,peso,valor,fornecedor\n")
+tem_next_txt = verifica_cria_arquivo("./next_id.txt", "0")
+tem_qtdprod_txt = verifica_cria_arquivo("./qtd_prod.txt", "0")
 
 
-#tentar fazer o split segundo as virgulas, em seguida
-#tirar o \n do último campo com replace. Somente vou testar o que acontece
-#quando faço um split em uma lista. Vish, acho que não vai dar certo
-#porque a lista, salvo engano, é homogênea. 
+if ((not tem_prod_txt) and tem_next_txt and tem_qtdprod_txt):
+  with open("./next_id.txt", "w") as arquivo:
+    arquivo.write("0")
+  with open("./qtd_prod.txt", "w") as arquivo:
+    arquivo.write("0")
 
-with open("qtd_prod.txt") as arquivo:
-  qtd_produtos = int(arquivo.read())
-
-format_produtos_txt = []
-#começa na 1, porque a 0 se refere aos nomes dos campos
-for i in range(1, qtd_produtos + 1):
-  format_produtos_txt.append(produtos_txt[i].split(',')) 
-  format_produtos_txt[i - 1][5] = format_produtos_txt[i - 1][5].replace('\n', '')
-  print(format_produtos_txt[i - 1])
-
-
+with open("./next_id.txt", "r") as arquivo:
+    next_id = int(arquivo.read())
+with open("./qtd_prod.txt", "r") as arquivo:
+    qtd_produtos = int(arquivo.read())
+  
+ 
 produtos = []
-
-#não precisa começar em 1, pois no índice 0 já tem o conteúdo da linha 1
-for i in range(0, qtd_produtos):
-  produtos.append({})
-  produtos[i]['id'] = int(format_produtos_txt[i][0])
-  produtos[i]['nome'] = format_produtos_txt[i][1]
-  produtos[i]['descricao'] = format_produtos_txt[i][2]
-  produtos[i]['peso'] = format_produtos_txt[i][3]
-  produtos[i]['valor'] = format_produtos_txt[i][4]
-  produtos[i]['fornecedor'] = format_produtos_txt[i][5]
-
-with open("next_id.txt") as x:
-  next_id = int(x.read())  
+produtos = cria_listdicio_com_csv("./produtos.txt") 
+ 
   
 resp = 8
 while resp != 6:
@@ -111,13 +141,7 @@ while resp != 6:
       #(em oposição a alterar a lista de produtos em si) 
       # segundo a ordem alfabetica.
       ids_ordenados = []
-      #criando a variável qtd_produtos para armazenar a quantidade
-      #de produtos, a qual vai ser utilizada dentro de um for
-      #para armazenar na lista todos os ids.
-      
-      #fazendo um for para atribuir todos os ids -  
-
-      ids_ordenados = acrescenta_ids_ordenados(qtd_produtos)
+      ids_ordenados =  acrescenta_ids_ordenados(qtd_produtos)
 
       #Aqui, vou fazer a estrutura do Bubble Sort
       k = qtd_produtos
@@ -151,20 +175,20 @@ while resp != 6:
       produtos[next_id]['valor'] = input('Digite a valor do produto: ')
       produtos[next_id]['fornecedor'] = input('Digite a fornecedor do produto: ')
 
-      with open("produtos.txt", "a") as arquivo:
+      with open("./produtos.txt", "a") as arquivo:
           arquivo.write(f'{produtos[next_id]["id"]},{produtos[next_id]["nome"]},{produtos[next_id]["descricao"]},{produtos[next_id]["peso"]},{produtos[next_id]["valor"]},{produtos[next_id]["fornecedor"]}\n')
         
       qtd_produtos += 1
       next_id+=1
      
-      with open("next_id.txt", "w") as arquivo:
+      with open("./next_id.txt", "w") as arquivo:
         arquivo.write(f"{next_id}")
-      with open("qtd_prod.txt", "w") as arquivo:
+      with open("./qtd_prod.txt", "w") as arquivo:
         arquivo.write(f"{qtd_produtos}")
         
       print('\n')
     case 4:
-      with open("produtos.txt", "r") as arquivo:
+      with open("./produtos.txt", "r") as arquivo:
         temp_info_produtos_txt = arquivo.readlines()
      
       querAlterarProdutos='s'
@@ -182,7 +206,7 @@ while resp != 6:
           #para devolver ao arquivo
 
           
-          atualiza_registros_em_produto_txt("produtos.txt", produtos, qtd_produtos)
+          atualiza_registros_em_produto_txt("./produtos.txt", produtos, qtd_produtos)
             
           querEditarCampoDoProduto = input('Deseja continuar alterando esse produto? (Resposta: s/n)')
         querAlterarProdutos= input('Deseja continuar alterando produtos? (Resposta: s/n)')
@@ -192,14 +216,14 @@ while resp != 6:
       del produtos[del_idx]
       
       qtd_produtos -= 1
-      with open("qtd_prod.txt", "w") as arquivo:
+      with open("./qtd_prod.txt", "w") as arquivo:
         arquivo.write(f'{qtd_produtos}')
 
       next_id -= 1
-      with open("next_id.txt", "w") as arquivo:
+      with open("./next_id.txt", "w") as arquivo:
         arquivo.write(f'{next_id}')
 
 
       produtos = reordena_ids(produtos, qtd_produtos)
 
-      atualiza_registros_em_produto_txt("produtos.txt", produtos, qtd_produtos)
+      atualiza_registros_em_produto_txt("./produtos.txt", produtos, qtd_produtos)
