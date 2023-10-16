@@ -27,3 +27,14 @@ def coluna():
 
 if __name__ == "__main__":
     
+    menu = '''
+=== MENU ===
+(1) Listar todos os produtos
+(2) Listar produto pelo ID
+(3) Listar todos os produtos ordenados (A/Z)
+(4) Cadastrar novo produto
+(5) Editar produto
+(6) Excluir produto
+(7) Sair do programa
+============'''
+    print(menu)
