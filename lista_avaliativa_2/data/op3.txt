@@ -1,0 +1,17 @@
+=== MENU: Listar todos os produtos ordenados (A/Z) ===
+METODOS
+(a) - Bubble sort
+(b) - Insertion sort
+(c) - Selection sort
+Escolha o método (a,b,c): 
+ORDEM
+(d) - crescente
+(e) - decrescente
+Escolha a ordem (d,e): 
+COLUNA
+(f) - id
+(g) - descricao
+(h) - peso
+(i) - valor
+(j) - fornecedor
+Escolha a ordem (f,g,h,i,j): 
