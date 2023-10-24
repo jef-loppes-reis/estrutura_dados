@@ -1,0 +1,2 @@
+id,nome,descricao,peso,valor,fornecedor
+0, Maca, Maca Vermelha, 100, 5, NOVACAP
