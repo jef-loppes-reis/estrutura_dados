@@ -23,8 +23,7 @@ Você pode acessar os arquivos do projeto clicando [aqui](https://github.com/jef
 
 ## ✔️ Técnicas e tecnologias utilizadas
 
-- ``Python 3.10.12``
-- ``Ubuntu 22.04``
+- ``Python 3.12``
 
 ## Autores
 
