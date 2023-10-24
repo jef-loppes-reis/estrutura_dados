@@ -1,4 +1,5 @@
 from os.path import dirname, exists
+from os import mkdir
 from getpass import getpass
 
 
@@ -33,7 +34,9 @@ def cria_registro_em_produto_txt(nome_arquivo, produtos, next_id):
                       produtos[next_id]["peso"]}, {produtos[next_id]["valor"]}, {produtos[next_id]["fornecedor"]}\n')
 
 
-def verifica_cria_arquivo(nome_arquivo, conteudo_inicial):
+def verifica_cria_arquivo(path, nome_arquivo, conteudo_inicial):
+    if not exists(f"{path}/../data"):
+        mkdir(f"{path}/../data")
     if not exists(nome_arquivo):
         open(nome_arquivo, "a")
         with open(nome_arquivo, "a") as arquivo:
