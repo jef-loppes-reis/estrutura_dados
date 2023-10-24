@@ -189,7 +189,7 @@ if __name__ == '__main__':
 
 
     # puxando arquivo para autenticação
-    verifica_cria_arquivo(f"{PATH}/../data/usuario.txt", "root\n123456")
+    verifica_cria_arquivo(PATH, f"{PATH}/../data/usuario.txt", "root\n123456")
 
     # Criando a autenticação. Primeiro, vamos extrair o login e senha corretos
     # do arquivo, em seguida tirar o '\n' do login.
@@ -219,9 +219,9 @@ if __name__ == '__main__':
     # produtos.txt
 
     tem_prod_txt = verifica_cria_arquivo(
-        f"{PATH}/../data/produtos.txt", "id,nome,descricao,peso,valor,fornecedor\n")
-    tem_next_txt = verifica_cria_arquivo(f"{PATH}/../data/next_id.txt", "0")
-    tem_qtdprod_txt = verifica_cria_arquivo(f"{PATH}/../data/qtd_prod.txt", "0")
+        PATH, f"{PATH}/../data/produtos.txt", "id,nome,descricao,peso,valor,fornecedor\n")
+    tem_next_txt = verifica_cria_arquivo(PATH, f"{PATH}/../data/next_id.txt", "0")
+    tem_qtdprod_txt = verifica_cria_arquivo(PATH, f"{PATH}/../data/qtd_prod.txt", "0")
 
     if ((not tem_prod_txt) and tem_next_txt and tem_qtdprod_txt):
         with open(f"{PATH}/../data/next_id.txt", "w") as arquivo:
@@ -253,8 +253,12 @@ if __name__ == '__main__':
 
         match resp:
             case 1:
-                for i in range(qtd_produtos):
-                    print(f'{produtos[i]}\n')
+                try:
+                  for i in range(qtd_produtos):
+                      print(f'{produtos[i]}\n')
+                except IndexError:
+                    print("Lista vazia.\n")
+                    
             case 2:
                 # colocando uma lista de ids, a qual vamos ordenar
                 # (em oposição a alterar a lista de produtos em si)
